@@ -24,9 +24,10 @@ public class MunicipioResources {
 
 	@RequestMapping(value = "/ufs", method = RequestMethod.GET)
 	public ResponseEntity<List<Uf>> obterUf() {
-		
+		// trocar domain
 		List<Uf> ufs; 
 		
+
 		ufs = ufRepository.findAll();
 		if (ufs.isEmpty())
 			return new ResponseEntity<List<Uf>>(ufs, HttpStatus.NO_CONTENT);
