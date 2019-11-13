@@ -1,5 +1,7 @@
 package br.com.drummond.resources;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,6 @@ public class MunicipioResources {
 	public ResponseEntity<List<Uf>> obterUf() {
 		// trocar domain
 		List<Uf> ufs; 
-		
 
 		ufs = ufRepository.findByOrderByUfDescricao();
 		if (ufs.isEmpty())
@@ -49,5 +50,34 @@ public class MunicipioResources {
 			return new ResponseEntity<List<Municipio>>(municipios, HttpStatus.NO_CONTENT);
 		
 		return new ResponseEntity<List<Municipio>>(municipios, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = {"/health", "/"}, method = RequestMethod.GET)
+	public String test() {
+		String result = "Api IBGE - Ativa" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		return result;
+	}
+	
+	@RequestMapping(value = "/doc", method = RequestMethod.GET)
+	public String doc() {
+		String result = "<!DOCTYPE html>\r\n" + 
+				"<html>\r\n" + 
+				"<head>\r\n" + 
+				"    <meta charset=\"utf-8\" />\r\n" + 
+				"    <title>IBGE API DOC</title>\r\n" + 
+				"</head>\r\n" + 
+				"<body>\r\n" + 
+				"    <h1>IBGE API DOC</h1>\r\n" + 
+				"    <p>Recursos (URNs)</p>\r\n" + 
+				"    <ul>\r\n" + 
+				"        <li>UF: url/ufs</li>\r\n" + 
+				"        <li>Municipios: url/municipios/{siglaUf}</li>\r\n" + 
+				"        <li>Exemplo para todos os municipios do Acre: <a href=\"municipios\\AC\" target=\"_blank\">municipios\\AC</a></li>\r\n" +
+				"    </ul>\r\n" + 
+				"</body>\r\n" + 
+				"</html>";
+		return result;
+		
+		
 	}
 }
