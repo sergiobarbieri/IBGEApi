@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.drummond.domain.Municipio;
 import br.com.drummond.domain.Uf;
-
+import br.com.drummond.repository.MunicipioRepository;
 import br.com.drummond.repository.UfRepository;
 
 @RestController
@@ -21,6 +22,9 @@ public class MunicipioResources {
 	
 	@Autowired
 	UfRepository ufRepository;
+	
+	@Autowired
+	MunicipioRepository municipioRepository;
 
 	@RequestMapping(value = "/ufs", method = RequestMethod.GET)
 	public ResponseEntity<List<Uf>> obterUf() {
@@ -28,23 +32,22 @@ public class MunicipioResources {
 		List<Uf> ufs; 
 		
 
-		ufs = ufRepository.findAll();
+		ufs = ufRepository.findByOrderByUfDescricao();
 		if (ufs.isEmpty())
 			return new ResponseEntity<List<Uf>>(ufs, HttpStatus.NO_CONTENT);
 		
 		return new ResponseEntity<List<Uf>>(ufs, HttpStatus.OK);
 	}
 	
-	
-	@RequestMapping(value = "/municipios/{uf}", method = RequestMethod.GET)
-	public ResponseEntity<List<Uf>> obterMunicipio(@PathVariable("uf") String uf ) {
+	@RequestMapping(value = "/municipios/{ufSigla}", method = RequestMethod.GET)
+	public ResponseEntity<List<Municipio>> obterMunicipio(@PathVariable("ufSigla") String ufSigla ) {
 		
-		List<Uf> ufs; 
+		List<Municipio> municipios; 
 		
-		ufs = ufRepository.findAll();
-		if (ufs.isEmpty())
-			return new ResponseEntity<List<Uf>>(ufs, HttpStatus.NO_CONTENT);
+		municipios = municipioRepository.findByUfSiglaOrderByNome(ufSigla);
+		if (municipios.isEmpty())
+			return new ResponseEntity<List<Municipio>>(municipios, HttpStatus.NO_CONTENT);
 		
-		return new ResponseEntity<List<Uf>>(ufs, HttpStatus.OK);
+		return new ResponseEntity<List<Municipio>>(municipios, HttpStatus.OK);
 	}
 }
